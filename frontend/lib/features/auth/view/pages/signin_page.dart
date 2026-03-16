@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/auth/view/pages/signup_page.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:frontend/features/auth/view/widgets/custom_field.dart';
-import 'package:frontend/core/theme/app_pallete.dart';
-import 'package:frontend/features/auth/view/pages/signin_page.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+import '../../../../core/theme/app_pallete.dart';
+
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
     @override
     void dispose() {
-      nameController.dispose();
       emailController.dispose();
       passwordController.dispose();
       super.dispose();
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(),
       body: Padding(
         padding: const .all(15.0),
         child: Form(
@@ -37,12 +36,10 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: .center,
             children: [
               const Text(
-                'Sign Up.',
-                style: TextStyle(fontSize: 50, fontWeight: .bold),
+                'Sign In.',
+                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 30),
-              CustomField(hintText: 'Name', controller: nameController),
-              const SizedBox(height: 15),
               CustomField(hintText: 'Email', controller: emailController),
               const SizedBox(height: 15),
               CustomField(
@@ -52,18 +49,17 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 20),
               AuthGradientButton(
-                buttonText: 'Sign up',
+                buttonText: 'Sign in',
                 onTap: () async {
-                  //  if (formKey.currentState!.validate()) {
-                  // await ref
-                  //     .read(authViewModelProvider.notifier)
-                  //     .signUpUser(
-                  //       name: nameController.text,
-                  //       email: emailController.text,
-                  //       password: passwordController.text,
-                  //     );
+                  // if (formKey.currentState!.validate()) {
+                  //   await ref
+                  //       .read(authViewModelProvider.notifier)
+                  //       .loginUser(
+                  //         email: emailController.text,
+                  //         password: passwordController.text,
+                  //       );
                   // } else {
-                  // showSnackBar(context, 'Missing fields!');
+                  //   showSnackBar(context, 'Missing fields!');
                   // }
                 },
               ),
@@ -72,19 +68,19 @@ class _SignUpPageState extends State<SignUpPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SignInPage()),
+                    MaterialPageRoute(builder: (context) => SignUpPage()),
                   );
                 },
                 child: RichText(
                   text: TextSpan(
-                    text: 'Already have an account? ',
+                    text: 'Don\'t have an account? ',
                     style: Theme.of(context).textTheme.titleMedium,
-                    children: const [
+                    children: [
                       TextSpan(
-                        text: 'Sign In',
+                        text: 'Sign Up',
                         style: TextStyle(
                           color: Pallete.gradient2,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: .bold,
                         ),
                       ),
                     ],
