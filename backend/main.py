@@ -8,7 +8,8 @@ import bcrypt
 
 app = FastAPI()
 
-DATABASE_URL = "postgresql://postgres:qwerty@localhost:5432/spotify_clone"
+# DATABASE_URL = "postgresql://postgres:qwerty@localhost:5432/spotify_clone"
+DATABASE_URL = "postgresql://postgres:Avrahta@localhost:5432/spotify_clone"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind = engine)
