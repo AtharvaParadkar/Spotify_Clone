@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/auth/repository/auth_remote_repository.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:frontend/features/auth/view/widgets/custom_field.dart';
 import 'package:frontend/core/theme/app_pallete.dart';
@@ -12,23 +13,26 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    @override
-    void dispose() {
-      nameController.dispose();
-      emailController.dispose();
-      passwordController.dispose();
-      super.dispose();
-    }
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(
+        title: const Text('Sign Up'),
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const .all(15.0),
         child: Form(
@@ -54,17 +58,12 @@ class _SignUpPageState extends State<SignUpPage> {
               AuthGradientButton(
                 buttonText: 'Sign up',
                 onTap: () async {
-                  //  if (formKey.currentState!.validate()) {
-                  // await ref
-                  //     .read(authViewModelProvider.notifier)
-                  //     .signUpUser(
-                  //       name: nameController.text,
-                  //       email: emailController.text,
-                  //       password: passwordController.text,
-                  //     );
-                  // } else {
-                  // showSnackBar(context, 'Missing fields!');
-                  // }
+                  debugPrint("Name: ${nameController.text}\nEmail: ${emailController.text}\npass: ${passwordController.text}");
+                  await AuthRemoteRepository().signup(
+                    name: nameController.text.toString(),
+                    email: emailController.text.toString(),
+                    password: passwordController.text.toString(),
+                  );
                 },
               ),
               const SizedBox(height: 20),
