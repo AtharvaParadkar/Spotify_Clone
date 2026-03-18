@@ -125,6 +125,10 @@ DATABASE_URL = "postgresql://<username>:<password>@localhost:5432/spotify_clone"
 uvicorn main:app --reload
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
+```ngork
+ngrok config add-authtoken 3B6e7RO6iKDuhDW6fOqT8vCgJ58_2YLzabKamUkBj8gHZ3HRi
+ngrok http 8000
+```
 
 The API will be available at:
 
