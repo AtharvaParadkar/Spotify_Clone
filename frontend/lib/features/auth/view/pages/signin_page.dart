@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/auth/repository/auth_remote_repository.dart';
 import 'package:frontend/features/auth/view/pages/signup_page.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:frontend/features/auth/view/widgets/custom_field.dart';
@@ -61,6 +62,13 @@ class _SignInPageState extends State<SignInPage> {
                   // } else {
                   //   showSnackBar(context, 'Missing fields!');
                   // }
+                  debugPrint(
+                    "Email: ${emailController.text}\npass: ${passwordController.text}",
+                  );
+                  await AuthRemoteRepository().login(
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
                 },
               ),
               const SizedBox(height: 20),
