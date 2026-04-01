@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:frontend/features/auth/repository/auth_remote_repository.dart';
 import 'package:frontend/features/auth/view/pages/signup_page.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
@@ -52,23 +53,19 @@ class _SignInPageState extends State<SignInPage> {
               AuthGradientButton(
                 buttonText: 'Sign in',
                 onTap: () async {
-                  // if (formKey.currentState!.validate()) {
-                  //   await ref
-                  //       .read(authViewModelProvider.notifier)
-                  //       .loginUser(
-                  //         email: emailController.text,
-                  //         password: passwordController.text,
-                  //       );
-                  // } else {
-                  //   showSnackBar(context, 'Missing fields!');
-                  // }
                   debugPrint(
                     "Email: ${emailController.text}\npass: ${passwordController.text}",
                   );
-                  await AuthRemoteRepository().login(
+                  final result = await AuthRemoteRepository().login(
                     email: emailController.text,
                     password: passwordController.text,
                   );
+
+                  final val = switch (result) {
+                    Left(value: final l) => l,
+                    Right(value: final r) => r,
+                  };
+                  debugPrint("Login result $val");
                 },
               ),
               const SizedBox(height: 20),

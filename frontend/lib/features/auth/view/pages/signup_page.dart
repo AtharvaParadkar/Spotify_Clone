@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:frontend/features/auth/repository/auth_remote_repository.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:frontend/features/auth/view/widgets/custom_field.dart';
@@ -58,12 +59,20 @@ class _SignUpPageState extends State<SignUpPage> {
               AuthGradientButton(
                 buttonText: 'Sign up',
                 onTap: () async {
-                  debugPrint("Name: ${nameController.text}\nEmail: ${emailController.text}\npass: ${passwordController.text}");
-                  await AuthRemoteRepository().signup(
+                  debugPrint(
+                    "Name: ${nameController.text}\nEmail: ${emailController.text}\npass: ${passwordController.text}",
+                  );
+                  final result = await AuthRemoteRepository().signup(
                     name: nameController.text.toString(),
                     email: emailController.text.toString(),
                     password: passwordController.text.toString(),
                   );
+
+                  final val = switch (result) {
+                    Left(value: final l) => l,
+                    Right(value: final r) => r.toString(),
+                  };
+                  debugPrint("Sign up result $result\n$val");
                 },
               ),
               const SizedBox(height: 20),
