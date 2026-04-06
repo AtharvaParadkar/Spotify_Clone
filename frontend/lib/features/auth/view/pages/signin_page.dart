@@ -66,6 +66,10 @@ class _SignInPageState extends State<SignInPage> {
                     Right(value: final r) => r,
                   };
                   debugPrint("Login result $val");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => MyWidget()),
+                  );
                 },
               ),
               const SizedBox(height: 20),
@@ -96,6 +100,18 @@ class _SignInPageState extends State<SignInPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('data')),
+      backgroundColor: Colors.black,
     );
   }
 }

@@ -2,14 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:frontend/core/constants/api_constants.dart';
 import 'package:frontend/core/failure/failure.dart';
 import 'package:frontend/features/auth/model/user_model.dart';
 import 'package:http/http.dart' as http;
-
-String baseUrl = "http://127.0.0.1:8000"; // for desktop app
-// String baseUrl = "http://192.168.1.228:8000";   // for actual device
-// String baseUrl = "https://harry-syngamic-poetically.ngrok-free.dev";   // universal
-// String baseUrl = "http://10.0.2.2:8000";   // for emulator
 
 class AuthRemoteRepository {
   Future<Either<ApiFailure, UserModel>> signup({
@@ -21,7 +17,7 @@ class AuthRemoteRepository {
     debugPrint("Repo Name: $name\nEmail: $email\npass: $password");
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/auth/signup"),
+        Uri.parse(ApiConstants.signup),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'name': name, 'email': email, 'password': password}),
       );
@@ -46,7 +42,7 @@ class AuthRemoteRepository {
     debugPrint("Login email: $email\nPassword: $password");
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/auth/login"),
+        Uri.parse(ApiConstants.login),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'email': email, 'password': password}),
       );
