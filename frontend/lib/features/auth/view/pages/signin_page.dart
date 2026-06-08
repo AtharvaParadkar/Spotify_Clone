@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:frontend/features/auth/repository/auth_remote_repository.dart';
 import 'package:frontend/features/auth/view/pages/signup_page.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
@@ -31,11 +31,11 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const .all(15.0),
+        padding: const EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
           child: Column(
-            mainAxisAlignment: .center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
                 'Sign In.',
@@ -89,7 +89,7 @@ class _SignInPageState extends State<SignInPage> {
                         text: 'Sign Up',
                         style: TextStyle(
                           color: Pallete.gradient2,
-                          fontWeight: .bold,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
