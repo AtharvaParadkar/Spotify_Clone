@@ -8,9 +8,11 @@ part 'auth_viewmodel.g.dart';
 
 @riverpod
 class AuthViewModel extends _$AuthViewModel {
-  final AuthRemoteRepository _authRemoteRepository = AuthRemoteRepository();
+  late AuthRemoteRepository _authRemoteRepository;
+
   @override
   AsyncValue<UserModel>? build() {
+    _authRemoteRepository = ref.watch(authRemoteRepositoryProvider);
     return null;
   }
 
@@ -35,5 +37,26 @@ class AuthViewModel extends _$AuthViewModel {
       Right(value: final r) => state = AsyncValue.data(r),
     };
     debugPrint("Sign up result $res\n$val");
+  }
+
+  Future<void> signInUser({
+    required String email,
+    required String password,
+  }) async {
+    state = const AsyncValue.loading();
+
+    final res = await _authRemoteRepository.login(
+      email: email,
+      password: password,
+    );
+
+    final val = switch (res) {
+      Left(value: final l) => state = AsyncValue.error(
+        l.message,
+        StackTrace.current,
+      ),
+      Right(value: final r) => state = AsyncValue.data(r),
+    };
+    debugPrint("Sign In result$res\n$val");
   }
 }

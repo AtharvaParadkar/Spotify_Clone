@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/core/utils.dart';
 import 'package:frontend/core/widgets/loader.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:frontend/features/auth/view/widgets/custom_field.dart';
@@ -35,28 +36,18 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     ref.listen(authViewModelProvider, (_, next) {
       next?.when(
         data: (data) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text("Account created Successfully"),
-                backgroundColor: Colors.greenAccent,
-              ),
-            );
+          Utils.showSnackBar(
+            context,
+            'Account created successfully',
+            Colors.greenAccent,
+          );
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SignInPage()),
           );
         },
         error: (error, st) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(error.toString()),
-                backgroundColor: Colors.redAccent,
-              ),
-            );
+          Utils.showSnackBar(context, error.toString(), Colors.redAccent);
         },
         loading: () {
           //? has a return type void so can't return any loading widget.
