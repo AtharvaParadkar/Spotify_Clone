@@ -64,7 +64,11 @@ class AuthRemoteRepository {
 
       debugPrint("Login respone - ${response.statusCode} - ${response.body}");
 
-      return Right(UserModel.fromMap(responseBody));
+      return Right(
+        UserModel.fromMap(
+          responseBody['user'],
+        ).copyWith(token: responseBody['token']),
+      );
     } catch (c) {
       return Left(ApiFailure('$c'));
     }
