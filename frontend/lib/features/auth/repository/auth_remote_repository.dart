@@ -25,11 +25,13 @@ class AuthRemoteRepository {
   }) async {
     debugPrint("Repo Name: $name\nEmail: $email\npass: $password");
     try {
-      final response = await http.post(
-        Uri.parse(ApiConstants.signup),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({'name': name, 'email': email, 'password': password}),
-      );
+      final response = await http
+          .post(
+            Uri.parse(ApiConstants.signup),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode({'name': name, 'email': email, 'password': password}),
+          )
+          .timeout(const Duration(seconds: 10));
 
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
 
@@ -50,11 +52,13 @@ class AuthRemoteRepository {
   }) async {
     debugPrint("Login email: $email\nPassword: $password");
     try {
-      final response = await http.post(
-        Uri.parse(ApiConstants.login),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({'email': email, 'password': password}),
-      );
+      final response = await http
+          .post(
+            Uri.parse(ApiConstants.login),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode({'email': email, 'password': password}),
+          )
+          .timeout(const Duration(seconds: 10));
 
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
 
@@ -71,6 +75,27 @@ class AuthRemoteRepository {
       );
     } catch (c) {
       return Left(ApiFailure('$c'));
+    }
+  }
+
+  Future<Either<ApiFailure, UserModel>> getCurrentUserData(String token) async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse(ApiConstants.userData),
+            headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+          )
+          .timeout(const Duration(seconds: 10));
+
+      final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+
+      if (response.statusCode != 200) {
+        return Left(ApiFailure(responseBody['detail']));
+      }
+
+      return Right(UserModel.fromMap(responseBody).copyWith(token: token));
+    } catch (c) {
+      return Left(ApiFailure(c.toString()));
     }
   }
 }

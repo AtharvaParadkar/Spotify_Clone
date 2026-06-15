@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/utils.dart';
 import 'package:frontend/core/widgets/loader.dart';
+import 'package:frontend/features/auth/view/pages/home_page.dart';
 import 'package:frontend/features/auth/view/pages/signup_page.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:frontend/features/auth/view/widgets/custom_field.dart';
@@ -30,7 +31,9 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewModelProvider)?.isLoading == true;
+    final isLoading =
+        ref.watch(authViewModelProvider.select((val) => val?.isLoading)) ==
+        true;
 
     ref.listen(authViewModelProvider, (_, next) {
       next?.when(
@@ -40,9 +43,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             'Login successfullly',
             Colors.greenAccent,
           );
-          Navigator.push(
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => MyWidget()),
+            MaterialPageRoute(builder: (_) => HomePage()),
+            (_) => false,
           );
         },
         error: (error, st) {
@@ -134,18 +138,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 ),
               ),
       ),
-    );
-  }
-}
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('data')),
-      backgroundColor: Colors.black,
     );
   }
 }
