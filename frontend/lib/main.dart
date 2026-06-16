@@ -5,6 +5,7 @@ import 'package:frontend/features/auth/view/pages/home_page.dart';
 import 'package:frontend/features/auth/view/pages/signup_page.dart';
 import 'package:frontend/core/theme/theme.dart';
 import 'package:frontend/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:frontend/features/home/view/pages/upload_song_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +30,7 @@ class MyApp extends ConsumerWidget {
       title: 'Music App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkThemeMode,
-      home: currentUser == null ? SignUpPage() : HomePage(),
+      home: currentUser == null ? SignUpPage() : UploadSongPage(),
     );
   }
 }

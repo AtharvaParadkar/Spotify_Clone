@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/utils.dart';
 import 'package:frontend/core/widgets/loader.dart';
 import 'package:frontend/features/auth/view/widgets/auth_gradient_button.dart';
-import 'package:frontend/features/auth/view/widgets/custom_field.dart';
+import 'package:frontend/core/widgets/custom_field.dart';
 import 'package:frontend/core/theme/app_pallete.dart';
 import 'package:frontend/features/auth/view/pages/signin_page.dart';
 import 'package:frontend/features/auth/viewmodel/auth_viewmodel.dart';
