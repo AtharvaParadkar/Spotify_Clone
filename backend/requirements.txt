@@ -3,3 +3,6 @@ sqlalchemy
 bcrypt
 psycopg2-binary
 uvicorn
+python-dotenv
+python-multipart
+cloudinary
