@@ -8,4 +8,6 @@ class ApiConstants {
   static const String signup = "$baseUrl/auth/signup";
   static const String login = "$baseUrl/auth/login";
   static const String userData = "$baseUrl/auth/";
+
+  static const String uploadSong = "$baseUrl/song/upload";
 }

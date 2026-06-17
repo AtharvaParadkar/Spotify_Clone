@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:frontend/core/utils.dart';
 import 'package:frontend/core/widgets/custom_field.dart';
+import 'package:frontend/features/home/repositories/home_repository.dart';
 import 'package:frontend/features/home/view/widgets/audio_wave.dart';
 
 class UploadSongPage extends ConsumerStatefulWidget {
@@ -55,7 +57,24 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Upload Song'),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.check))],
+        actions: [
+          IconButton(
+            onPressed: () async {
+              log('Uploadingggggggggg');
+              await HomeRepository().uploadSong(
+                selectAudio: selectedAudio!,
+                selectThumbnail: selectedImage!,
+                songName: 'songName',
+                artist: 'artist',
+                hexCode: 'hexCode',
+                token:
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1Zjc0M2UyLTBlYTMtNDQwMS05ZjkwLTE5NjU2ZTFlNzg4NCJ9.AXtQkrF8m-_ecnYcufIjT6GkA78Jh1ETvQ25I34ic_A',
+              );
+              log('Uploadeddddddd');
+            },
+            icon: Icon(Icons.check),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
