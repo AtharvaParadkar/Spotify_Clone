@@ -5,7 +5,7 @@ from models.user import User
 from pydantic_scheme.user_create import CreateUser
 from fastapi import APIRouter, Depends, HTTPException, Header
 from database import get_db
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 import jwt
 from middleware.auth_middleware import auth_middleware
 
@@ -54,7 +54,7 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
 
 @router.get('/')
 def current_user_data(db: Session=Depends(get_db), user_dict = Depends(auth_middleware)):
-    user = db.query(User).filter(User.id == user_dict['uid']).first()
+    user = db.query(User).filter(User.id == user_dict['uid']).options(joinedload(User.favorites)).first()
 
     if not user:
         raise HTTPException(404,'User not found')
