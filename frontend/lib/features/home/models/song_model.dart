@@ -2,6 +2,17 @@ import 'dart:convert';
 // ignore_for_file: non_constant_identifier_names
 
 class SongModel {
+  static String _secureMediaUrl(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null) return url;
+
+    if (uri.scheme == 'http' && uri.host == 'res.cloudinary.com') {
+      return uri.replace(scheme: 'https').toString();
+    }
+
+    return url;
+  }
+
   final String id;
   final String song_name;
   final String artist;
@@ -51,8 +62,8 @@ class SongModel {
       id: map['id'] ?? '',
       song_name: map['song_name'] ?? '',
       artist: map['artist'] as String,
-      thumbnail_url: map['thumbnail_url'] ?? '',
-      song_url: map['song_url'] ?? '',
+      thumbnail_url: _secureMediaUrl(map['thumbnail_url'] ?? ''),
+      song_url: _secureMediaUrl(map['song_url'] ?? ''),
       hex_code: map['hex_code'] ?? '',
     );
   }

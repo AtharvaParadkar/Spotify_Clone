@@ -43,11 +43,16 @@ def upload_song(
         song_name = song_name,
         artist = artist,
         hex_code = hex_code,
-        song_url = song_res['url'],
-        thumbnail_url = thumbnail_res['url']
+        song_url = song_res.get('secure_url') or song_res['url'],
+        thumbnail_url = thumbnail_res.get('secure_url') or thumbnail_res['url']
     )
     
     db.add(new_song)
     db.commit()
     db.refresh(new_song)
     return new_song
+
+@router.get('/list')
+def list_songs(db: Session = Depends(get_db), auth_details = Depends(auth_middleware)):
+    songs = db.query(Song).all()
+    return songs
