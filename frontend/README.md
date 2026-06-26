@@ -1,172 +1,149 @@
 # 📱 Spotify Clone — Frontend
 
-The Flutter frontend for the Spotify Clone project. This cross-platform application delivers a Spotify-inspired music streaming UI with a rich dark theme, gradient accents, and a structured feature-based architecture.
+The cross-platform Flutter application for the Spotify Clone project. It features a responsive UI inspired by the Spotify design language, complete with a rich dark theme, custom audio player overlays, background playback, and offline local cache sync.
 
 ---
 
 ## 🗂️ Project Structure
 
-```
+```text
 frontend/
 ├── lib/
-│   ├── main.dart                        # App entry point
-│   ├── core/
-│   │   └── theme/
-│   │       ├── app_pallete.dart         # Color palette & design tokens
-│   │       └── theme.dart              # Global ThemeData configuration
+│   ├── main.dart                        # Application entry point (initializes Hive and audio services)
+│   ├── core/                            # Global core modules shared across features
+│   │   ├── theme/
+│   │   │   ├── app_pallete.dart         # Hex design tokens & theme palette
+│   │   │   └── theme.dart              # Global ThemeData configuration (Dark Mode)
+│   │   ├── failure/
+│   │   │   └── failure.dart             # API failure handling wrapper
+│   │   ├── utils.dart                   # Shared utils (color converters, file picker assistants)
+│   │   └── providers/
+│   │       ├── current_user_notifier.dart # Riverpod notifier for authenticated user profile
+│   │       └── current_song_notifier.dart # Player notifier managing audio stream, player states, seek positions
 │   └── features/
-│       └── auth/
-│           └── view/
-│               ├── pages/
-│               │   ├── signup_page.dart  # Sign Up screen
-│               │   └── signin_page.dart  # Sign In screen
-│               └── widgets/
-│                   ├── auth_gradient_button.dart  # Gradient CTA button
-│                   └── custom_field.dart           # Styled text input field
-├── android/                             # Android platform files
-├── ios/                                 # iOS platform files
-├── web/                                 # Web platform files
-├── windows/                             # Windows platform files
-├── linux/                               # Linux platform files
-├── macos/                               # macOS platform files
-├── pubspec.yaml                         # Dependencies and app metadata
+│       ├── auth/                        # User authentication module
+│       │   ├── model/                   # User and auth state models
+│       │   ├── repository/              # Network client for login, registration, and profile fetch
+│       │   ├── view/
+│       │   │   ├── pages/               # SignupPage and SignInPage screens
+│       │   │   └── widgets/             # Reusable CustomField forms and AuthGradientButton CTA
+│       │   └── viewmodel/               # AuthViewModel managing auth flows and saving JWT to Shared Preferences
+│       └── home/                        # Music dashboards, player, library and track upload module
+│           ├── models/                  # Audio track metadata models
+│           ├── repositories/            # HomeRepository (remote HTTP API) and HomeLocalRepository (Hive caching)
+│           ├── view/
+│           │   ├── pages/               # HomePage navigation hub, SongsPage list, LibraryPage, UploadSongPage
+│           │   └── widgets/             # MusicSlab (floating footer), MusicPlayer (detail sheet), AudioWave
+│           └── viewmodel/               # HomeViewModel coordinating song streams, uploads, and favorites
+├── android/                             # Platform folder containing native android background player rules
+├── ios/                                 # Platform folder containing native iOS audio session configurations
+├── pubspec.yaml                         # App metadata, assets declaration, and external package dependencies
 └── README.md                            # You are here
 ```
 
 ---
 
-## 🚀 Tech Stack
+## 🚀 Tech Stack & Core Libraries
 
-| Technology        | Purpose                                  |
-|-------------------|------------------------------------------|
-| Flutter           | Cross-platform UI framework              |
-| Dart `^3.10.3`    | Programming language                     |
-| Material Design 3 | UI components and theming                |
-| Cupertino Icons   | iOS-style icon pack                      |
-
----
-
-## ✨ Features
-
-- 🎨 **Dark Theme** — Spotify-inspired `#121212` background with gradient highlights
-- 🖋️ **Custom Widgets** — Reusable `CustomField` and `AuthGradientButton` components
-- 🔐 **Authentication Screens** — Sign Up and Sign In pages connected to the FastAPI backend
-- 🌈 **Gradient Palette** — Purple → Pink → Peach gradient color system
-- 📐 **Feature-Based Architecture** — Scalable folder structure organized by feature
+| Package | Purpose |
+| :--- | :--- |
+| **Flutter / Dart** | Cross-platform client development (Material 3 layout) |
+| **flutter_riverpod** | Global state management |
+| **riverpod_generator** | Code-generation tool to automatically create state providers |
+| **http** | High-level HTTP client for REST API communication |
+| **fpdart** | Functional programming tools (using `Either` for success/failure handling) |
+| **shared_preferences** | Cache user token (JWT) locally to persist user login sessions |
+| **hive** | Fast, lightweight NoSQL database used to cache recently played tracks locally |
+| **just_audio** | Feature-rich audio player for local/network file streaming |
+| **just_audio_background** | Configures background playback service and lock screen notification media controls |
+| **audio_waveforms** | Displays custom, interactive audio waveforms during play sessions |
+| **flex_color_picker** | Color picker used when uploading tracks to choose the player theme color |
+| **dotted_border** | Dashed visual indicator box for local file upload selection |
+| **file_picker** | Picks audio files and cover art image files from device directories |
 
 ---
 
 ## 🎨 Design System
 
-The app uses a consistent global color palette defined in `app_pallete.dart`:
+The app utilizes a design system defined in `app_pallete.dart` featuring a clean, modern dark appearance:
 
-| Token                     | Color                              | Usage                       |
-|---------------------------|------------------------------------|-----------------------------|
-| `backgroundColor`         | `#121212` (RGBA 18,18,18)          | Scaffold background         |
-| `cardColor`               | `#1E1E1E` (RGBA 30,30,30)          | Cards and surfaces          |
-| `gradient1`               | `#BB3FDD` (Purple)                 | Gradient start              |
-| `gradient2`               | `#FB6DA9` (Pink)                   | Gradient mid / border focus |
-| `gradient3`               | `#FF9F7C` (Peach)                  | Gradient end                |
-| `borderColor`             | `#343343`                          | Input field borders         |
-| `whiteColor`              | `#FFFFFF`                          | Primary text                |
-| `subtitleText`            | `#A7A7A7`                          | Secondary / subtitle text   |
-| `inactiveBottomBarItem`   | `#ABABAB`                          | Inactive nav bar icons      |
-| `inactiveSeekColor`       | `white38`                          | Seek bar inactive track     |
-
----
-
-## 🛠️ Setup & Installation
-
-### Prerequisites
-
-- [Flutter SDK](https://flutter.dev/docs/get-started/install) — version `3.x` or later
-- Dart SDK `^3.10.3` (comes bundled with Flutter)
-- A connected device, emulator, or web browser
+| Color Token | Value | Primary Usage |
+| :--- | :--- | :--- |
+| `backgroundColor` | `#121212` | Main page scaffold backgrounds |
+| `cardColor` | `#1E1E1E` | Card components, container boxes, and surfaces |
+| `gradient1` | `#BB3FDD` | Purple accent color (Gradient start) |
+| `gradient2` | `#FB6DA9` | Pink accent color (Gradient middle / focused border) |
+| `gradient3` | `#FF9F7C` | Peach accent color (Gradient end) |
+| `borderColor` | `#343343` | Inactive text field border contours |
+| `whiteColor` | `#FFFFFF` | Primary headers and text labels |
+| `subtitleText` | `#A7A7A7` | Secondary text, track metadata, and subtitles |
+| `inactiveBottomBarItem` | `#ABABAB` | Secondary icons and navigation buttons |
 
 ---
 
-### 1. Navigate to the Frontend Directory
+## 🛠️ Setup & Run
+
+### 1. Install Flutter
+
+Ensure you have a recent version of Flutter SDK installed. This project targets Dart SDK `^3.10.3` and Flutter `3.x`.
+
+```bash
+flutter --version
+```
+
+### 2. Configure Backend Endpoint
+
+Open `lib/core/constants/api_constants.dart`. Set `baseUrl` to match your active FastAPI backend address:
+* For local desktop platforms / simulators: `http://127.0.0.1:8000`
+* For physical testing devices: Update to match your host machine's IP (e.g. `http://192.168.1.xxx:8000`)
+* For tunnel routing: Insert your public ngrok URL (e.g. `https://xxx.ngrok-free.dev`)
+
+### 3. Install Dependencies
+
+Navigate to the frontend directory and fetch the packages:
 
 ```bash
 cd frontend
-```
-
----
-
-### 2. Install Dependencies
-
-```bash
 flutter pub get
 ```
 
----
+### 4. Run Code Generation
 
-### 3. Configure the Backend URL
-
-Before running, make sure the backend API is running. Update the base API URL in your API service files to point to your backend:
-
-```
-http://localhost:8000
-```
-
----
-
-### 4. Run the App
+The project relies on Riverpod's automatic code generators (`riverpod_generator`). Before building the app, compile the state provider files:
 
 ```bash
-# Run on a connected device or emulator
+# One-time build:
+dart run build_runner build --delete-conflicting-outputs
+
+# Continuous watch (automatically rebuilds on file changes):
+dart run build_runner watch --delete-conflicting-outputs
+```
+
+### 5. Launch the Application
+
+Make sure your emulator is booted or a physical device is connected, then run:
+
+```bash
+# Run on default connected device
 flutter run
 
-# Run specifically on Chrome
+# Run target web client
 flutter run -d chrome
-
-# Run on Windows desktop
-flutter run -d windows
 ```
 
 ---
 
-## 📦 Dependencies
+## 🏗️ State & Storage Architecture
 
-| Package           | Version   | Purpose                              |
-|-------------------|-----------|--------------------------------------|
-| `flutter`         | SDK       | Core framework                       |
-| `cupertino_icons` | `^1.0.8`  | iOS-style icons                      |
-| `flutter_lints`   | `^6.0.0`  | Recommended lint rules (dev)         |
+### Global State Flow
+The application state revolves around **Riverpod Notifiers**:
+1. **User Auth Session (`currentUserNotifierProvider`)**: Synchronizes authenticated state, fetches profile updates from `/auth/`, and stores the authorization token in `SharedPreferences`.
+2. **Track Playback Session (`currentSongNotifierProvider`)**: Directs `just_audio` player instances, controls stream URLs, updates seeking time, and updates player bar styling (leveraging the color hex value from the song entity).
 
-> Run `flutter pub outdated` to check for newer versions.
-
----
-
-## 🏗️ Architecture
-
-This project follows a **feature-based clean architecture** pattern:
-
-```
-lib/
-├── core/           # Shared utilities, themes, constants (app-wide)
-└── features/       # Self-contained feature modules
-    └── auth/       # Authentication feature
-        └── view/   # UI layer — pages and widgets
-```
-
-Each feature will eventually contain:
-
-- `view/` — UI (pages + widgets)
-- `viewmodel/` — State management / business logic
-- `repository/` — Data layer / API calls
-- `models/` — Data models
-
----
-
-## 📌 Roadmap
-
-- [ ] Sign In screen connected to backend `/signin` endpoint
-- [ ] JWT token storage and session management
-- [ ] Home screen with song listing
-- [ ] Music player with seek bar and controls
-- [ ] Playlist management
-- [ ] State management (Riverpod / BLoC)
+### Caching Architecture
+- **Hive Database**: When a song is selected, the entity metadata is cached locally in Hive using `HomeLocalRepository`.
+- **Local library fallback**: Users can fetch their recently played songs directly from the local Hive box when offline.
+- **Audio service integration**: Audio files are streamed asynchronously with buffer checks, and lock screen media details are managed automatically using `just_audio_background`.
 
 ---
 

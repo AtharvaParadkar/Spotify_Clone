@@ -1,39 +1,42 @@
 # 🎵 Spotify Clone — Full Stack
 
-A full-stack Spotify-inspired music streaming application built with **Flutter** on the frontend and **FastAPI + PostgreSQL** on the backend.
+A full-stack, cross-platform Spotify-inspired music streaming application. It features a stunning **Flutter** client on the frontend, powered by a robust and high-performance **FastAPI** backend with **PostgreSQL** relational database persistence and **Cloudinary** cloud media hosting.
 
 ---
 
 ## 🗂️ Project Structure
 
-```
+```text
 Spotify_Clone/
-├── frontend/        # Flutter mobile/desktop application
-├── backend/         # Python FastAPI REST API
-└── README.md        # You are here
+├── frontend/        # Flutter mobile & desktop client application
+├── backend/         # FastAPI Python REST API & database controllers
+└── README.md        # Project overview and entry-point guide
 ```
 
 ---
 
 ## 🚀 Tech Stack
 
-| Layer       | Technology                          |
-|-------------|-------------------------------------|
-| Frontend    | Flutter (Dart)                      |
-| Backend     | Python, FastAPI                     |
-| Database    | PostgreSQL                          |
-| ORM         | SQLAlchemy                          |
-| Auth        | bcrypt password hashing             |
+| Layer | Technology | Key Capabilities / Packages |
+| :--- | :--- | :--- |
+| **Frontend** | Flutter & Dart | Material 3, Riverpod State Management, Just Audio, Audio Waveforms, Hive |
+| **Backend** | Python & FastAPI | Asynchronous requests, Pydantic data validation, JWT |
+| **Database** | PostgreSQL | Relational storage for users, songs, and favorites |
+| **ORM** | SQLAlchemy | Declarative models and relationships |
+| **Media Host** | Cloudinary | Cloud storage and CDN streaming for audio & thumbnails |
+| **Auth** | bcrypt & PyJWT | Password hashing, secure JWT state validation |
 
 ---
 
 ## ✨ Features
 
-- 🔐 **User Authentication** — Sign up and sign in with secure bcrypt-hashed passwords
-- 🎨 **Dark Theme UI** — Spotify-inspired dark mode with gradient accents
-- 📱 **Cross-Platform** — Runs on Android, iOS, Web, Windows, macOS, and Linux
-- 🔗 **RESTful API** — Clean API endpoints powered by FastAPI
-- 🗄️ **PostgreSQL Database** — Persistent storage for users and (upcoming) music data
+- 🔐 **Secure User Auth** — Registration and login with bcrypt password hashing and JWT token exchange.
+- 🎵 **Audio Streaming & Control** — Play, pause, and seek tracks with a rich player interface. Supports background audio playback on mobile devices via `just_audio_background`.
+- 🎨 **Visual Polish** — Gradient themes, dark mode aesthetics, interactive sliders, and color-matched track layouts.
+- ☁️ **Media Cloud Upload** — Form-based uploads (audio file + cover thumbnail) stored on Cloudinary.
+- 💖 **Favorite Library** — Toggle favorite status on tracks with persistent user-specific storage.
+- 📦 **Offline Caching** — Local cache synchronization using Hive for fast load times and offline usability.
+- 📱 **Cross-Platform Support** — Fully responsive and optimized UI running on Android, iOS, Web, Windows, macOS, and Linux.
 
 ---
 
@@ -41,11 +44,10 @@ Spotify_Clone/
 
 ### Prerequisites
 
-Make sure you have the following installed:
-
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (Dart SDK `^3.10.3`)
 - [Python 3.10+](https://www.python.org/downloads/)
 - [PostgreSQL](https://www.postgresql.org/download/)
+- A [Cloudinary Account](https://cloudinary.com/) (for backend media uploads)
 
 ---
 
@@ -58,27 +60,28 @@ cd Spotify_Clone
 
 ---
 
-### 2. Set Up the Backend
+### 2. Configure & Run Backend
 
-> See [`backend/README.md`](./backend/README.md) for full backend setup instructions.
+For comprehensive setup details, environment keys, and DB configuration, refer to the [Backend README](./backend/README.md).
 
 ```bash
 cd backend
 python -m venv venv
 venv\Scripts\activate        # Windows
 # source venv/bin/activate   # macOS/Linux
+
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
 ---
 
-### 3. Set Up the Frontend
+### 3. Configure & Run Frontend
 
-> See [`frontend/README.md`](./frontend/README.md) for full frontend setup instructions.
+For details on local caching, asset directories, and state generation, see the [Frontend README](./frontend/README.md).
 
 ```bash
-cd frontend
+cd ../frontend
 flutter pub get
 flutter run
 ```
@@ -87,31 +90,30 @@ flutter run
 
 ## 📡 API Overview
 
-| Method | Endpoint   | Description             |
-|--------|------------|-------------------------|
-| POST   | `/signup`  | Register a new user     |
-| POST   | `/signin`  | Authenticate a user     |
+The backend service runs at `http://localhost:8000` by default. Swagger documentation is available at `/docs`.
 
-The API runs at `http://localhost:8000` by default. Interactive docs are available at `http://localhost:8000/docs`.
+### Authentication (`/auth`)
+* `POST /auth/signup` — Registers a new user.
+* `POST /auth/login` — Authenticates a user and returns a JWT token.
+* `GET /auth/` — Returns the current user profile along with favorite songs.
 
----
-
-## 📸 Screenshots
-
-> *(Coming soon — add screenshots of the app here)*
+### Songs & Actions (`/song`)
+* `POST /song/upload` — Uploads a new song & cover art (admin/user).
+* `GET /song/list` — Lists all available songs.
+* `POST /song/favorite` — Toggles favorite status on a song for the current user.
+* `GET /song/list/favorites` — Fetches the list of favorited songs for the current user.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to open a pull request or file an issue.
+Contributions, issues, and feature requests are welcome! Feel free to open a pull request or submit a new issue.
 
 ---
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open-source and licensed under the [MIT License](LICENSE).
 
 ---
-
 > Built with ❤️ by [Atharva Paradkar](https://github.com/AtharvaParadkar)
