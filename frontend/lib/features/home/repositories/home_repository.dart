@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:frontend/core/constants/api_constants.dart';
 import 'package:frontend/core/failure/failure.dart';
+import 'package:frontend/features/home/models/song_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:http/http.dart' as http;
 part 'home_repository.g.dart';
@@ -50,6 +52,84 @@ class HomeRepository {
       return Right(await res.stream.bytesToString());
     } catch (c) {
       return Left(ApiFailure(c.toString()));
+    }
+  }
+
+  Future<Either<ApiFailure, List<SongModel>>> getAllSongs({
+    required String token,
+  }) async {
+    try {
+      final res = await http.get(
+        Uri.parse(ApiConstants.songList),
+        headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+      );
+      var resBodyMap = jsonDecode(res.body);
+
+      if (res.statusCode != 200) {
+        resBodyMap = resBodyMap as Map<String, dynamic>;
+        return Left(ApiFailure(resBodyMap['detail']));
+      }
+      resBodyMap = resBodyMap as List;
+
+      List<SongModel> songs = [];
+
+      for (final map in resBodyMap) {
+        songs.add(SongModel.fromMap(map));
+      }
+      return Right(songs);
+    } catch (c) {
+      return Left(ApiFailure(c.toString()));
+    }
+  }
+
+  Future<Either<ApiFailure, bool>> favSong({
+    required String token,
+    required String songId,
+  }) async {
+    try {
+      final res = await http.post(
+        Uri.parse(ApiConstants.favSong),
+        headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+        body: jsonEncode({"song_id": songId}),
+      );
+      var resBodyMap = jsonDecode(res.body);
+
+      if (res.statusCode != 200) {
+        resBodyMap = resBodyMap as Map<String, dynamic>;
+        return Left(ApiFailure(resBodyMap['detail']));
+      }
+
+      return Right(resBodyMap['message']);
+    } catch (e) {
+      return Left(ApiFailure(e.toString()));
+    }
+  }
+
+  Future<Either<ApiFailure, List<SongModel>>> getFavSongs({
+    required String token,
+  }) async {
+    try {
+      final res = await http.get(
+        Uri.parse(ApiConstants.getFavSong),
+        headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+      );
+      var resBodyMap = jsonDecode(res.body);
+
+      if (res.statusCode != 200) {
+        resBodyMap = resBodyMap as Map<String, dynamic>;
+        return Left(ApiFailure(resBodyMap['detail']));
+      }
+      resBodyMap = resBodyMap as List;
+
+      List<SongModel> songs = [];
+
+      for (final map in resBodyMap) {
+        songs.add(SongModel.fromMap(map['song']));
+      }
+
+      return Right(songs);
+    } catch (e) {
+      return Left(ApiFailure(e.toString()));
     }
   }
 }

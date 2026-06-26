@@ -8,9 +8,9 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:frontend/core/utils.dart';
 import 'package:frontend/core/widgets/custom_field.dart';
 import 'package:frontend/core/widgets/loader.dart';
+import 'package:frontend/features/home/view/pages/home_page.dart';
 import 'package:frontend/features/home/view/widgets/audio_wave.dart';
 import 'package:frontend/features/home/viewmodel/home_viewmodel.dart';
-import 'package:frontend/features/auth/view/pages/home_page.dart';
 
 class UploadSongPage extends ConsumerStatefulWidget {
   const UploadSongPage({super.key});

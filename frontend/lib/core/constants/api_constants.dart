@@ -10,4 +10,7 @@ class ApiConstants {
   static const String userData = "$baseUrl/auth/";
 
   static const String uploadSong = "$baseUrl/song/upload";
+  static const String songList = "$baseUrl/song/list";
+  static const String favSong = "$baseUrl/song/favorite";
+  static const String getFavSong = "$baseUrl/song/list/favorites";
 }
